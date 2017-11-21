@@ -13,6 +13,11 @@
 import { increment, get } from "./api";
 import { startShortpolling, stopShortpolling } from "./short_poll.js";
 import { EventBus } from "./event-bus.js";
+import {
+  START_SHORTPOLLING,
+  STOP_SHORTPOLLING,
+  COUNTER_INCREMENTED
+} from "./bus-events.js";
 
 export default {
   name: "app",
@@ -31,13 +36,13 @@ export default {
   },
   created: function() {
     startShortpolling();
-    EventBus.$on("counter_incremented", clickCount => {
+    EventBus.$on(COUNTER_INCREMENTED, clickCount => {
       this.$data.counter = clickCount;
     });
-    EventBus.$on("start_shortpolling", () => {
+    EventBus.$on(START_SHORTPOLLING, () => {
       this.$data.isShortpolling = 1;
     });
-    EventBus.$on("stop_shortpolling", () => {
+    EventBus.$on(STOP_SHORTPOLLING, () => {
       this.$data.isShortpolling = 0;
     });
     window.onblur = function() {

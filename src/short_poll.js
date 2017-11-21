@@ -1,14 +1,19 @@
 import { increment, get } from "./api";
 import { EventBus } from "./event-bus.js";
+import {
+  START_SHORTPOLLING,
+  STOP_SHORTPOLLING,
+  COUNTER_INCREMENTED
+} from "./bus-events.js";
 
 let INTERVAL_ID;
 
 export function startShortpolling() {
-  EventBus.$emit("start_shortpolling", 0);
+  EventBus.$emit(START_SHORTPOLLING, 0);
   let cached_counter = 0;
   get()
     .then(counter => {
-      EventBus.$emit("counter_incremented", counter);
+      EventBus.$emit(COUNTER_INCREMENTED, counter);
     })
     .catch(e => {
       console.log(error);
@@ -17,7 +22,7 @@ export function startShortpolling() {
     get()
       .then(counter => {
         if (cached_counter !== counter) {
-          EventBus.$emit("counter_incremented", counter);
+          EventBus.$emit(COUNTER_INCREMENTED, counter);
         }
       })
       .catch(e => {
@@ -28,5 +33,5 @@ export function startShortpolling() {
 
 export function stopShortpolling() {
   clearInterval(INTERVAL_ID);
-  EventBus.$emit("stop_shortpolling", 0);
+  EventBus.$emit(STOP_SHORTPOLLING, 0);
 }
